@@ -1,18 +1,20 @@
+############### Blackjack Project #####################
+
 from art import logo
 from random import randint as r
 from replit import clear
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+player_name = input("What's is your name? ")
+player_points = 0
+comp_points = 0
 
-def game():
-    first = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
-    if first == "y":
-        clear()
-        print(logo)
-    else:
-        print("*****Thank You for play with Us. GoodBye!*****")
-        return "END"
+player_balance = int(input("Your account balance:$"))
+
+def game(player_balance, player_bet):
+
     player = []
     comp = []
+    
     comp.append(cards[r(0,12)])
     player.append(cards[r(0,12)])
     player.append(cards[r(0,12)])
@@ -48,16 +50,36 @@ def game():
     #Who is the Winner?
     if sum(player) == 21:
         print("Win with a Blackjack 😎")
+        player_balance += player_bet
     elif (sum(player) > sum(comp)) and (sum(player) < 22):
         print("You win 😃")
+        player_balance += player_bet
     elif (sum(player) < 22) and (sum(comp) > 21):
         print("You win 😃")
+        player_balance += player_bet
     elif sum(player) == sum(comp) and (sum(player) < 22):
         print("Draw 🙃")
     elif sum(player) < sum(comp) and sum(comp) < 22:
         print("You lose 😤")
+        player_balance -= player_bet
     else:
         print("You went over. You lose 😭")
-    game()
+        player_balance -= player_bet
+    return player_balance
 
-game()
+new_game = True
+while new_game:
+    first = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
+    if first == "y":
+        clear()
+        print(logo)
+        if player_balance > 0:
+            print(f"Your balance is {player_balance}.")
+            player_bet = int(input("Please, your bet: $"))
+            player_balance = game(player_balance, player_bet)
+        else:
+            print("You don't have a money. GodBye!")
+            break
+    else:
+        print("*****Thank You for play with Us. GoodBye!*****")
+        new_game = False
